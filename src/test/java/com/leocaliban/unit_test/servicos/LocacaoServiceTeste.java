@@ -10,7 +10,9 @@ import static org.junit.Assert.assertThat;
 import java.util.Date;
 
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ErrorCollector;
 
 import com.leocaliban.unit_test.entidades.Filme;
 import com.leocaliban.unit_test.entidades.Locacao;
@@ -18,6 +20,9 @@ import com.leocaliban.unit_test.entidades.Usuario;
 import com.leocaliban.unit_test.utils.DataUtils;
 
 public class LocacaoServiceTeste {
+	
+	@Rule
+	public ErrorCollector error = new ErrorCollector();
 	
 	@Test
 	public void teste() {
@@ -51,4 +56,21 @@ public class LocacaoServiceTeste {
 		assertThat(isMesmaData(locacao.getDataLocacao(), new Date()), is(true));
 		assertThat(isMesmaData(locacao.getDataRetorno(),obterDataComDiferencaDias(1)), is(true));
 	}
+	
+	//Teste com Rule ErrorCollector
+	@Test
+	public void testeLocacao() {
+		//cenario
+		LocacaoService service = new LocacaoService();
+		Usuario usuario = new Usuario("Rafael");
+		Filme filme = new Filme("Anabelle", 2, 5.0);
+		
+		//acao
+		Locacao locacao = service.alugarFilme(usuario, filme);
+		
+		//verificacao
+		error.checkThat(locacao.getValor(), is(equalTo(6.0)));
+		error.checkThat(isMesmaData(locacao.getDataLocacao(), new Date()), is(true));
+		error.checkThat(isMesmaData(locacao.getDataRetorno(),obterDataComDiferencaDias(1)), is(false));
+	}	
 }
