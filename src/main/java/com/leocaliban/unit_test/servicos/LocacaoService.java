@@ -7,10 +7,16 @@ import java.util.Date;
 import com.leocaliban.unit_test.entidades.Filme;
 import com.leocaliban.unit_test.entidades.Locacao;
 import com.leocaliban.unit_test.entidades.Usuario;
+import com.leocaliban.unit_test.servicos.exceptions.FilmeSemEstoqueException;
 
 public class LocacaoService {
 	
-	public Locacao alugarFilme(Usuario usuario, Filme filme) {
+	public Locacao alugarFilme(Usuario usuario, Filme filme) throws FilmeSemEstoqueException  {
+		
+		if(filme.getEstoque() == 0) {
+			throw new FilmeSemEstoqueException("Filme sem estoque.");
+		}
+		
 		Locacao locacao = new Locacao();
 		locacao.setFilme(filme);
 		locacao.setUsuario(usuario);
