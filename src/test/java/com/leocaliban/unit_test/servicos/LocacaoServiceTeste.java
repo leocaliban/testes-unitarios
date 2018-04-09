@@ -187,5 +187,57 @@ public class LocacaoServiceTeste {
 		//verificacao
 		assertThat(resultado.getValor(), is(11d));
 	}
+	
+	@Test
+	public void devePagar50pctNoFilme4() throws FilmeSemEstoqueException, LocadoraException {
+		//cenario
+		Usuario usuario = new Usuario("Rafael");
+		List<Filme> filmes = Arrays.asList(new Filme("Anabelle", 2, 4.0), 
+											new Filme("Casa de Cera", 2, 4.0),
+											new Filme("Rambo", 1, 4.0),
+											new Filme("Fury", 5, 4.0));
+		
+		//acao
+		Locacao resultado = service.alugarFilme(usuario, filmes);
+		
+		//verificacao
+		assertThat(resultado.getValor(), is(13d));
+	}
+	
+	@Test
+	public void devePagar25pctNoFilme5() throws FilmeSemEstoqueException, LocadoraException {
+		//cenario
+		Usuario usuario = new Usuario("Rafael");
+		List<Filme> filmes = Arrays.asList(new Filme("Anabelle", 2, 4.0), 
+											new Filme("Casa de Cera", 2, 4.0),
+											new Filme("Rambo", 1, 4.0),
+											new Filme("Pearl Harbor", 2, 4.0),
+											new Filme("Fury", 5, 4.0));
+		
+		//acao
+		Locacao resultado = service.alugarFilme(usuario, filmes);
+		
+		//verificacao
+		assertThat(resultado.getValor(), is(14d));
+	}
+	
+	
+	@Test
+	public void devePagar0pctNoFilme6() throws FilmeSemEstoqueException, LocadoraException {
+		//cenario
+		Usuario usuario = new Usuario("Rafael");
+		List<Filme> filmes = Arrays.asList(new Filme("Anabelle", 2, 4.0), 
+											new Filme("Casa de Cera", 2, 4.0),
+											new Filme("Rambo", 1, 4.0),
+											new Filme("Pearl Harbor", 2, 4.0),
+											new Filme("The Mummy", 2, 4.0),
+											new Filme("Fury", 5, 4.0));
+		
+		//acao
+		Locacao resultado = service.alugarFilme(usuario, filmes);
+		
+		//verificacao
+		assertThat(resultado.getValor(), is(14d));
+	}
 		
 }
