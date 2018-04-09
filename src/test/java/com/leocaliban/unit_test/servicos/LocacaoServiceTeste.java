@@ -76,7 +76,7 @@ public class LocacaoServiceTeste {
 	
 	//Teste com Rule ErrorCollector
 	@Test
-	public void testeLocacao() {
+	public void deveAlugarFilme() {
 		//cenario
 		Usuario usuario = new Usuario("Rafael");
 		List<Filme> filmes = Arrays.asList(new Filme("Anabelle", 2, 5.0));
@@ -99,7 +99,7 @@ public class LocacaoServiceTeste {
 	//teste simplificado, elegante, onde o JUnit trata o que se espera.
 	//Indicado usar quando o projeto possui exceções personalizadas, que serão direcionadas ao teste em específico.
 	@Test(expected=FilmeSemEstoqueException.class)
-	public void testeLocacao_FilmeSemEstoque() throws FilmeSemEstoqueException, LocadoraException  {
+	public void naoDeveAlugarFilmeSemEstoque() throws FilmeSemEstoqueException, LocadoraException  {
 		//cenario
 		Usuario usuario = new Usuario("Rafael");
 		List<Filme> filmes = Arrays.asList(new Filme("Anabelle", 0, 5.0));
@@ -143,7 +143,7 @@ public class LocacaoServiceTeste {
 	
 	//robusta
 	@Test
-	public void testeLocacao_UsuarioVazio() throws FilmeSemEstoqueException {
+	public void naoDeveAlugarFilmeSemUsuario() throws FilmeSemEstoqueException {
 		List<Filme> filmes = Arrays.asList(new Filme("Anabelle", 2, 5.0));
 
 		// acao
@@ -160,7 +160,7 @@ public class LocacaoServiceTeste {
 	
 	//nova
 	@Test
-	public void testeLocacao_FilmeVazio() throws FilmeSemEstoqueException, LocadoraException {
+	public void naoDeveAlugarFilmeSemFilme() throws FilmeSemEstoqueException, LocadoraException {
 		// cenario
 		Usuario usuario = new Usuario("Rafael");
 		
@@ -169,6 +169,23 @@ public class LocacaoServiceTeste {
 		// acao
 		service.alugarFilme(usuario, null);
 		
+	}
+	
+	
+	
+	@Test
+	public void devePagar75pctNoFilme3() throws FilmeSemEstoqueException, LocadoraException {
+		//cenario
+		Usuario usuario = new Usuario("Rafael");
+		List<Filme> filmes = Arrays.asList(new Filme("Anabelle", 2, 4.0), 
+											new Filme("Casa de Cera", 2, 4.0),
+											new Filme("Rambo", 1, 4.0));
+		
+		//acao
+		Locacao resultado = service.alugarFilme(usuario, filmes);
+		
+		//verificacao
+		assertThat(resultado.getValor(), is(11d));
 	}
 		
 }
