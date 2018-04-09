@@ -6,9 +6,11 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -238,6 +240,21 @@ public class LocacaoServiceTeste {
 		
 		//verificacao
 		assertThat(resultado.getValor(), is(14d));
+	}
+	
+	
+	@Test
+	public void deveDevolverFilmeNaSegundaAoAlugarNoSabado() throws FilmeSemEstoqueException, LocadoraException{
+		//cenario
+		Usuario usuario = new Usuario("Rafael");
+		List<Filme> filmes = Arrays.asList(new Filme("Anabelle", 2, 5.0));
+		
+		//acao
+		Locacao retorno = service.alugarFilme(usuario, filmes);
+		
+		//verificacao
+		boolean isSegunda = DataUtils.verificarDiaSemana(retorno.getDataRetorno(), Calendar.MONDAY);
+		assertTrue(isSegunda);
 	}
 		
 }

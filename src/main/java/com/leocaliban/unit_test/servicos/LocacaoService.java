@@ -2,6 +2,7 @@ package com.leocaliban.unit_test.servicos;
 
 import static com.leocaliban.unit_test.utils.DataUtils.adicionarDias;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -10,6 +11,7 @@ import com.leocaliban.unit_test.entidades.Locacao;
 import com.leocaliban.unit_test.entidades.Usuario;
 import com.leocaliban.unit_test.servicos.exceptions.FilmeSemEstoqueException;
 import com.leocaliban.unit_test.servicos.exceptions.LocadoraException;
+import com.leocaliban.unit_test.utils.DataUtils;
 
 public class LocacaoService {
 	
@@ -61,6 +63,11 @@ public class LocacaoService {
 		//Entrega no dia seguinte
 		Date dataEntrega = new Date();
 		dataEntrega = adicionarDias(dataEntrega, 1);
+		
+		if(DataUtils.verificarDiaSemana(dataEntrega, Calendar.SUNDAY)) {
+			dataEntrega = adicionarDias(dataEntrega, 1);
+		}
+		
 		locacao.setDataRetorno(dataEntrega);
 		
 		//Salvando a locacao...	
