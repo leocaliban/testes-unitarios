@@ -11,6 +11,7 @@ import static org.junit.Assert.fail;
 import java.util.Date;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ErrorCollector;
@@ -25,16 +26,22 @@ import com.leocaliban.unit_test.utils.DataUtils;
 
 public class LocacaoServiceTeste {
 	
+	private LocacaoService service;
+
 	@Rule
 	public ErrorCollector error = new ErrorCollector();
 	
 	@Rule //referente ao FilmeSemEstoque3, forma nova
 	public ExpectedException exceptedException = ExpectedException.none();
 	
+	@Before
+	public void criarCenario() {
+		service = new LocacaoService();
+	}
+	
 	@Test
 	public void teste() throws FilmeSemEstoqueException, LocadoraException {
 		//cenario
-		LocacaoService service = new LocacaoService();
 		Usuario usuario = new Usuario("Rafael");
 		Filme filme = new Filme("Anabelle", 2, 5.0);
 		
@@ -51,7 +58,6 @@ public class LocacaoServiceTeste {
 	@Test
 	public void testeAssertThat() throws FilmeSemEstoqueException, LocadoraException {
 		//cenario
-		LocacaoService service = new LocacaoService();
 		Usuario usuario = new Usuario("Rafael");
 		Filme filme = new Filme("Anabelle", 2, 5.0);
 		
@@ -70,7 +76,6 @@ public class LocacaoServiceTeste {
 	@Test
 	public void testeLocacao() {
 		//cenario
-		LocacaoService service = new LocacaoService();
 		Usuario usuario = new Usuario("Rafael");
 		Filme filme = new Filme("Anabelle", 2, 5.0);
 		
@@ -94,7 +99,6 @@ public class LocacaoServiceTeste {
 	@Test(expected=FilmeSemEstoqueException.class)
 	public void testeLocacao_FilmeSemEstoque() throws FilmeSemEstoqueException, LocadoraException  {
 		//cenario
-		LocacaoService service = new LocacaoService();
 		Usuario usuario = new Usuario("Rafael");
 		Filme filme = new Filme("Anabelle", 0, 5.0);
 		
@@ -106,7 +110,6 @@ public class LocacaoServiceTeste {
 	@Test
 	public void testeLocacao_FilmeSemEstoque2() throws LocadoraException {
 		//cenario
-		LocacaoService service = new LocacaoService();
 		Usuario usuario = new Usuario("Rafael");
 		Filme filme = new Filme("Anabelle", 0, 5.0);
 		
@@ -124,7 +127,6 @@ public class LocacaoServiceTeste {
 	@Test
 	public void testeLocacao_FilmeSemEstoque3() throws FilmeSemEstoqueException, LocadoraException {
 		//cenario
-		LocacaoService service = new LocacaoService();
 		Usuario usuario = new Usuario("Rafael");
 		Filme filme = new Filme("Anabelle", 0, 5.0);
 		
@@ -140,7 +142,6 @@ public class LocacaoServiceTeste {
 	//robusta
 	@Test
 	public void testeLocacao_UsuarioVazio() throws FilmeSemEstoqueException {
-		LocacaoService service = new LocacaoService();
 		Filme filme = new Filme("Anabelle", 2, 5.0);
 
 		// acao
@@ -159,7 +160,6 @@ public class LocacaoServiceTeste {
 	@Test
 	public void testeLocacao_FilmeVazio() throws FilmeSemEstoqueException, LocadoraException {
 		// cenario
-		LocacaoService service = new LocacaoService();
 		Usuario usuario = new Usuario("Rafael");
 		
 		exceptedException.expect(LocadoraException.class);
