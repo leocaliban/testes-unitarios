@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.junit.Assert;
+import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -79,6 +80,7 @@ public class LocacaoServiceTeste {
 	//Teste com Rule ErrorCollector
 	@Test
 	public void deveAlugarFilme() {
+		Assume.assumeFalse(DataUtils.verificarDiaSemana(new Date(), Calendar.SATURDAY));
 		//cenario
 		Usuario usuario = new Usuario("Rafael");
 		List<Filme> filmes = Arrays.asList(new Filme("Anabelle", 2, 5.0));
@@ -245,6 +247,7 @@ public class LocacaoServiceTeste {
 	
 	@Test
 	public void deveDevolverFilmeNaSegundaAoAlugarNoSabado() throws FilmeSemEstoqueException, LocadoraException{
+		Assume.assumeTrue(DataUtils.verificarDiaSemana(new Date(), Calendar.SATURDAY));
 		//cenario
 		Usuario usuario = new Usuario("Rafael");
 		List<Filme> filmes = Arrays.asList(new Filme("Anabelle", 2, 5.0));
