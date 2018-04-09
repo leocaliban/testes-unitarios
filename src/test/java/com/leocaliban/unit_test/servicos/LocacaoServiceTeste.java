@@ -8,7 +8,9 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -43,10 +45,10 @@ public class LocacaoServiceTeste {
 	public void teste() throws FilmeSemEstoqueException, LocadoraException {
 		//cenario
 		Usuario usuario = new Usuario("Rafael");
-		Filme filme = new Filme("Anabelle", 2, 5.0);
+		List<Filme> filmes = Arrays.asList(new Filme("Anabelle", 2, 5.0));
 		
 		//acao
-		Locacao locacao = service.alugarFilme(usuario, filme);
+		Locacao locacao = service.alugarFilme(usuario, filmes);
 
 		// verificacao
 		Assert.assertEquals(5.0, locacao.getValor(), 0.01);
@@ -59,10 +61,10 @@ public class LocacaoServiceTeste {
 	public void testeAssertThat() throws FilmeSemEstoqueException, LocadoraException {
 		//cenario
 		Usuario usuario = new Usuario("Rafael");
-		Filme filme = new Filme("Anabelle", 2, 5.0);
+		List<Filme> filmes = Arrays.asList(new Filme("Anabelle", 2, 5.0));
 		
 		//acao
-		Locacao locacao = service.alugarFilme(usuario, filme);
+		Locacao locacao = service.alugarFilme(usuario, filmes);
 
 		// verificacao
 		assertThat(locacao.getValor(), is(equalTo(5.0)));
@@ -77,12 +79,12 @@ public class LocacaoServiceTeste {
 	public void testeLocacao() {
 		//cenario
 		Usuario usuario = new Usuario("Rafael");
-		Filme filme = new Filme("Anabelle", 2, 5.0);
+		List<Filme> filmes = Arrays.asList(new Filme("Anabelle", 2, 5.0));
 		
 		//acao
 		Locacao locacao;
 		try {//quando o teste não precisar lançar exceção, não precisa usar try
-			locacao = service.alugarFilme(usuario, filme);
+			locacao = service.alugarFilme(usuario, filmes);
 			
 			//verificacao
 			error.checkThat(locacao.getValor(), is(equalTo(5.0)));
@@ -100,10 +102,10 @@ public class LocacaoServiceTeste {
 	public void testeLocacao_FilmeSemEstoque() throws FilmeSemEstoqueException, LocadoraException  {
 		//cenario
 		Usuario usuario = new Usuario("Rafael");
-		Filme filme = new Filme("Anabelle", 0, 5.0);
+		List<Filme> filmes = Arrays.asList(new Filme("Anabelle", 0, 5.0));
 		
 		//acao
-		service.alugarFilme(usuario, filme);
+		service.alugarFilme(usuario, filmes);
 	}
 	
 	//teste robusto, onde se tem o total controle sobre o que se espera, no caso das exceções.
@@ -111,11 +113,11 @@ public class LocacaoServiceTeste {
 	public void testeLocacao_FilmeSemEstoque2() throws LocadoraException {
 		//cenario
 		Usuario usuario = new Usuario("Rafael");
-		Filme filme = new Filme("Anabelle", 0, 5.0);
+		List<Filme> filmes = Arrays.asList(new Filme("Anabelle", 0, 5.0));
 		
 		//acao
 		try {
-			service.alugarFilme(usuario, filme);
+			service.alugarFilme(usuario, filmes);
 			fail("Deve ser lançada uma Exceção.");
 		} 
 		catch (FilmeSemEstoqueException e) {
@@ -128,13 +130,13 @@ public class LocacaoServiceTeste {
 	public void testeLocacao_FilmeSemEstoque3() throws FilmeSemEstoqueException, LocadoraException {
 		//cenario
 		Usuario usuario = new Usuario("Rafael");
-		Filme filme = new Filme("Anabelle", 0, 5.0);
+		List<Filme> filmes = Arrays.asList(new Filme("Anabelle", 0, 5.0));
 		
 		exceptedException.expect(FilmeSemEstoqueException.class);
 		exceptedException.expectMessage("Filme sem estoque.");
 		
 		//acao
-		service.alugarFilme(usuario, filme);
+		service.alugarFilme(usuario, filmes);
 		
 	}
 	
@@ -142,11 +144,11 @@ public class LocacaoServiceTeste {
 	//robusta
 	@Test
 	public void testeLocacao_UsuarioVazio() throws FilmeSemEstoqueException {
-		Filme filme = new Filme("Anabelle", 2, 5.0);
+		List<Filme> filmes = Arrays.asList(new Filme("Anabelle", 2, 5.0));
 
 		// acao
 		try {
-			service.alugarFilme(null, filme);
+			service.alugarFilme(null, filmes);
 			fail();
 		}
 		catch (LocadoraException e) {
