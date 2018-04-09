@@ -20,6 +20,7 @@ import com.leocaliban.unit_test.entidades.Filme;
 import com.leocaliban.unit_test.entidades.Locacao;
 import com.leocaliban.unit_test.entidades.Usuario;
 import com.leocaliban.unit_test.servicos.exceptions.FilmeSemEstoqueException;
+import com.leocaliban.unit_test.servicos.exceptions.LocadoraException;
 import com.leocaliban.unit_test.utils.DataUtils;
 
 public class LocacaoServiceTeste {
@@ -31,7 +32,7 @@ public class LocacaoServiceTeste {
 	public ExpectedException exceptedException = ExpectedException.none();
 	
 	@Test
-	public void teste() throws FilmeSemEstoqueException {
+	public void teste() throws FilmeSemEstoqueException, LocadoraException {
 		//cenario
 		LocacaoService service = new LocacaoService();
 		Usuario usuario = new Usuario("Rafael");
@@ -48,7 +49,7 @@ public class LocacaoServiceTeste {
 	}
 	
 	@Test
-	public void testeAssertThat() throws FilmeSemEstoqueException {
+	public void testeAssertThat() throws FilmeSemEstoqueException, LocadoraException {
 		//cenario
 		LocacaoService service = new LocacaoService();
 		Usuario usuario = new Usuario("Rafael");
@@ -82,15 +83,16 @@ public class LocacaoServiceTeste {
 			error.checkThat(locacao.getValor(), is(equalTo(5.0)));
 			error.checkThat(isMesmaData(locacao.getDataLocacao(), new Date()), is(true));
 			error.checkThat(isMesmaData(locacao.getDataRetorno(),obterDataComDiferencaDias(1)), is(true));
-		} catch (FilmeSemEstoqueException e) {
-			// TODO Auto-generated catch block
+		} 
+		catch (Exception e) {
 			e.printStackTrace();
 		}	
 	}
 	
 	//teste simplificado, elegante, onde o JUnit trata o que se espera.
+	//Indicado usar quando o projeto possui exceções personalizadas, que serão direcionadas ao teste em específico.
 	@Test(expected=FilmeSemEstoqueException.class)
-	public void testeLocacao_FilmeSemEstoque() throws FilmeSemEstoqueException {
+	public void testeLocacao_FilmeSemEstoque() throws FilmeSemEstoqueException, LocadoraException  {
 		//cenario
 		LocacaoService service = new LocacaoService();
 		Usuario usuario = new Usuario("Rafael");
@@ -102,7 +104,7 @@ public class LocacaoServiceTeste {
 	
 	//teste robusto, onde se tem o total controle sobre o que se espera, no caso das exceções.
 	@Test
-	public void testeLocacao_FilmeSemEstoque2() {
+	public void testeLocacao_FilmeSemEstoque2() throws LocadoraException {
 		//cenario
 		LocacaoService service = new LocacaoService();
 		Usuario usuario = new Usuario("Rafael");
@@ -120,7 +122,7 @@ public class LocacaoServiceTeste {
 	
 	//forma nova usando rules
 	@Test
-	public void testeLocacao_FilmeSemEstoque3() throws FilmeSemEstoqueException {
+	public void testeLocacao_FilmeSemEstoque3() throws FilmeSemEstoqueException, LocadoraException {
 		//cenario
 		LocacaoService service = new LocacaoService();
 		Usuario usuario = new Usuario("Rafael");
@@ -134,4 +136,37 @@ public class LocacaoServiceTeste {
 		
 	}
 	
+	
+	//robusta
+	@Test
+	public void testeLocacao_UsuarioVazio() throws FilmeSemEstoqueException {
+		LocacaoService service = new LocacaoService();
+		Filme filme = new Filme("Anabelle", 2, 5.0);
+
+		// acao
+		try {
+			service.alugarFilme(null, filme);
+			fail();
+		}
+		catch (LocadoraException e) {
+			assertThat(e.getMessage(), is("Usuário vazio."));
+		}
+	
+	}
+	
+	
+	//nova
+	@Test
+	public void testeLocacao_FilmeVazio() throws FilmeSemEstoqueException, LocadoraException {
+		// cenario
+		LocacaoService service = new LocacaoService();
+		Usuario usuario = new Usuario("Rafael");
+		
+		exceptedException.expect(LocadoraException.class);
+		exceptedException.expectMessage("Filme vazio.");
+		// acao
+		service.alugarFilme(usuario, null);
+		
+	}
+		
 }

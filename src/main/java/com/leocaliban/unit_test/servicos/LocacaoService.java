@@ -8,10 +8,19 @@ import com.leocaliban.unit_test.entidades.Filme;
 import com.leocaliban.unit_test.entidades.Locacao;
 import com.leocaliban.unit_test.entidades.Usuario;
 import com.leocaliban.unit_test.servicos.exceptions.FilmeSemEstoqueException;
+import com.leocaliban.unit_test.servicos.exceptions.LocadoraException;
 
 public class LocacaoService {
 	
-	public Locacao alugarFilme(Usuario usuario, Filme filme) throws FilmeSemEstoqueException  {
+	public Locacao alugarFilme(Usuario usuario, Filme filme) throws FilmeSemEstoqueException, LocadoraException {
+		
+		if(usuario == null) {
+			throw new LocadoraException("Usuário vazio.");
+		}
+		
+		if(filme == null) {
+			throw new LocadoraException("Filme vazio.");
+		}
 		
 		if(filme.getEstoque() == 0) {
 			throw new FilmeSemEstoqueException("Filme sem estoque.");
