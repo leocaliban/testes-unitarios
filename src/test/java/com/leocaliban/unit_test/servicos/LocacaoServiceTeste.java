@@ -1,6 +1,8 @@
 package com.leocaliban.unit_test.servicos;
 
 import static com.leocaliban.unit_test.matchers.MatchersProprios.caiNumaSegunda;
+import static com.leocaliban.unit_test.matchers.MatchersProprios.isHoje;
+import static com.leocaliban.unit_test.matchers.MatchersProprios.isHojeComDiferencaDias;
 import static com.leocaliban.unit_test.utils.DataUtils.isMesmaData;
 import static com.leocaliban.unit_test.utils.DataUtils.obterDataComDiferencaDias;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -94,6 +96,8 @@ public class LocacaoServiceTeste {
 			error.checkThat(locacao.getValor(), is(equalTo(5.0)));
 			error.checkThat(isMesmaData(locacao.getDataLocacao(), new Date()), is(true));
 			error.checkThat(isMesmaData(locacao.getDataRetorno(),obterDataComDiferencaDias(1)), is(true));
+			error.checkThat(locacao.getDataLocacao(), isHoje());
+			error.checkThat(locacao.getDataRetorno(), isHojeComDiferencaDias(1));
 		} 
 		catch (Exception e) {
 			e.printStackTrace();
