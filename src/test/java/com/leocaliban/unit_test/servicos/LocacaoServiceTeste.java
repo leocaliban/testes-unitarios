@@ -1,12 +1,12 @@
 package com.leocaliban.unit_test.servicos;
 
+import static com.leocaliban.unit_test.matchers.MatchersProprios.caiNumaSegunda;
 import static com.leocaliban.unit_test.utils.DataUtils.isMesmaData;
 import static com.leocaliban.unit_test.utils.DataUtils.obterDataComDiferencaDias;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.Arrays;
@@ -187,8 +187,8 @@ public class LocacaoServiceTeste {
 		Locacao retorno = service.alugarFilme(usuario, filmes);
 		
 		//verificacao
-		boolean isSegunda = DataUtils.verificarDiaSemana(retorno.getDataRetorno(), Calendar.MONDAY);
-		assertTrue(isSegunda);
+		//assertThat(retorno.getDataRetorno(), caiEm(Calendar.MONDAY)); (OUTRA FORMA)
+		assertThat(retorno.getDataRetorno(), caiNumaSegunda());
 	}
 		
 }
