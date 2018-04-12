@@ -34,6 +34,8 @@ import com.leocaliban.unit_test.servicos.exceptions.FilmeSemEstoqueException;
 import com.leocaliban.unit_test.servicos.exceptions.LocadoraException;
 import com.leocaliban.unit_test.utils.DataUtils;
 
+import buildermaster.BuilderMaster;
+
 public class LocacaoServiceTeste {
 	
 	private LocacaoService service;
@@ -194,6 +196,10 @@ public class LocacaoServiceTeste {
 		//verificacao
 		//assertThat(retorno.getDataRetorno(), caiEm(Calendar.MONDAY)); (OUTRA FORMA)
 		assertThat(retorno.getDataRetorno(), caiNumaSegunda());
+	}
+	
+	public static void main(String[] args) {
+		new BuilderMaster().gerarCodigoClasse(Locacao.class);
 	}
 		
 }
