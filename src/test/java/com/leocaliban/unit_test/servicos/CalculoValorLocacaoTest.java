@@ -15,6 +15,8 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
 
+import com.leocaliban.unit_test.daos.LocacaoDAO;
+import com.leocaliban.unit_test.daos.LocacaoDAOFake;
 import com.leocaliban.unit_test.entidades.Filme;
 import com.leocaliban.unit_test.entidades.Locacao;
 import com.leocaliban.unit_test.entidades.Usuario;
@@ -38,6 +40,8 @@ public class CalculoValorLocacaoTest {
 	@Before
 	public void setup() {
 		service = new LocacaoService();
+		LocacaoDAO dao = new LocacaoDAOFake();
+		service.setLocacaoDAO(dao);
 	}
 	
 	private static Filme filme1 = umFilme().agora();

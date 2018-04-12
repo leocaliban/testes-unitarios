@@ -27,14 +27,14 @@ import org.junit.rules.ErrorCollector;
 import org.junit.rules.ExpectedException;
 
 import com.leocaliban.unit_test.builders.FilmeBuilder;
+import com.leocaliban.unit_test.daos.LocacaoDAO;
+import com.leocaliban.unit_test.daos.LocacaoDAOFake;
 import com.leocaliban.unit_test.entidades.Filme;
 import com.leocaliban.unit_test.entidades.Locacao;
 import com.leocaliban.unit_test.entidades.Usuario;
 import com.leocaliban.unit_test.servicos.exceptions.FilmeSemEstoqueException;
 import com.leocaliban.unit_test.servicos.exceptions.LocadoraException;
 import com.leocaliban.unit_test.utils.DataUtils;
-
-import buildermaster.BuilderMaster;
 
 public class LocacaoServiceTeste {
 	
@@ -49,6 +49,8 @@ public class LocacaoServiceTeste {
 	@Before
 	public void criarCenario() {
 		service = new LocacaoService();
+		LocacaoDAO dao = new LocacaoDAOFake();
+		service.setLocacaoDAO(dao);
 	}
 	
 	@Test
@@ -168,7 +170,6 @@ public class LocacaoServiceTeste {
 	
 	}
 	
-	
 	//nova
 	@Test
 	public void naoDeveAlugarFilmeSemFilme() throws FilmeSemEstoqueException, LocadoraException {
@@ -196,10 +197,6 @@ public class LocacaoServiceTeste {
 		//verificacao
 		//assertThat(retorno.getDataRetorno(), caiEm(Calendar.MONDAY)); (OUTRA FORMA)
 		assertThat(retorno.getDataRetorno(), caiNumaSegunda());
-	}
-	
-	public static void main(String[] args) {
-		new BuilderMaster().gerarCodigoClasse(Locacao.class);
 	}
 		
 }

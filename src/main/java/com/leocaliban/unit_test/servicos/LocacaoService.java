@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import com.leocaliban.unit_test.daos.LocacaoDAO;
 import com.leocaliban.unit_test.entidades.Filme;
 import com.leocaliban.unit_test.entidades.Locacao;
 import com.leocaliban.unit_test.entidades.Usuario;
@@ -14,6 +15,8 @@ import com.leocaliban.unit_test.servicos.exceptions.LocadoraException;
 import com.leocaliban.unit_test.utils.DataUtils;
 
 public class LocacaoService {
+	
+	private LocacaoDAO dao;
 	
 	public Locacao alugarFilme(Usuario usuario, List<Filme> filmes) throws FilmeSemEstoqueException, LocadoraException {
 		
@@ -71,8 +74,13 @@ public class LocacaoService {
 		locacao.setDataRetorno(dataEntrega);
 		
 		//Salvando a locacao...	
-		//TODO adicionar método para salvar
+		dao.salvar(locacao);
 		
 		return locacao;
+	}
+	
+	//injeção de dependência do DAO
+	public void setLocacaoDAO(LocacaoDAO dao) {
+		this.dao = dao;
 	}
 }
