@@ -25,10 +25,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ErrorCollector;
 import org.junit.rules.ExpectedException;
+import org.mockito.Mockito;
 
 import com.leocaliban.unit_test.builders.FilmeBuilder;
 import com.leocaliban.unit_test.daos.LocacaoDAO;
-import com.leocaliban.unit_test.daos.LocacaoDAOFake;
 import com.leocaliban.unit_test.entidades.Filme;
 import com.leocaliban.unit_test.entidades.Locacao;
 import com.leocaliban.unit_test.entidades.Usuario;
@@ -49,7 +49,7 @@ public class LocacaoServiceTeste {
 	@Before
 	public void criarCenario() {
 		service = new LocacaoService();
-		LocacaoDAO dao = new LocacaoDAOFake();
+		LocacaoDAO dao = Mockito.mock(LocacaoDAO.class);
 		service.setLocacaoDAO(dao);
 	}
 	
