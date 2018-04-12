@@ -1,5 +1,6 @@
 package com.leocaliban.unit_test.servicos;
 
+import static com.leocaliban.unit_test.builders.FilmeBuilder.umFilme;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -39,13 +40,13 @@ public class CalculoValorLocacaoTest {
 		service = new LocacaoService();
 	}
 	
-	private static Filme filme1 = new Filme("Anabelle",2,4.0);
-	private static Filme filme2 = new Filme("Casa de Cera",2,4.0);
-	private static Filme filme3 = new Filme("Rambo",1,4.0);
-	private static Filme filme4 = new Filme("Pearl Harbor", 2, 4.0);
-	private static Filme filme5 = new Filme("The Mummy", 2, 4.0);
-	private static Filme filme6 = new Filme("Fury", 5, 4.0);
-	private static Filme filme7 = new Filme("Baby Driver", 5, 6.0);
+	private static Filme filme1 = umFilme().agora();
+	private static Filme filme2 = umFilme().agora();
+	private static Filme filme3 = umFilme().agora();
+	private static Filme filme4 = umFilme().agora();
+	private static Filme filme5 = umFilme().agora();
+	private static Filme filme6 = umFilme().agora();
+	private static Filme filme7 = umFilme().agora();
 	
 	@Parameters(name = "{2}")
 	public static Collection<Object[]> getParametros(){
@@ -55,7 +56,7 @@ public class CalculoValorLocacaoTest {
 			{Arrays.asList(filme1, filme2, filme3, filme4), 13d, "4 Filmes: 50%"},
 			{Arrays.asList(filme1, filme2, filme3, filme4, filme5), 14d, "5 Filmes: 75%"},
 			{Arrays.asList(filme1, filme2, filme3, filme4, filme5, filme6), 14d, "6 Filmes: 100%"},
-			{Arrays.asList(filme1, filme2, filme3, filme4, filme5, filme6, filme7), 20d, "7 Filmes: Sem Desconto"}
+			{Arrays.asList(filme1, filme2, filme3, filme4, filme5, filme6, filme7), 18d, "7 Filmes: Sem Desconto"}
 		});
 	}
 
