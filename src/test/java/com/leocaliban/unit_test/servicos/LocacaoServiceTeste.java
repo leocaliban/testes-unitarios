@@ -12,6 +12,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
+import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.Calendar;
@@ -212,7 +213,7 @@ public class LocacaoServiceTeste {
 		Usuario usuario = umUsuario().agora();
 		List<Filme> filmes = Arrays.asList(umFilme().agora());
 		
-		Mockito.when(spc.possuiSaldoNegativo(usuario)).thenReturn(true);
+		when(spc.possuiSaldoNegativo(usuario)).thenReturn(true);
 		
 		exceptedException.expect(LocadoraException.class);
 		exceptedException.expectMessage("Usuário está com saldo negativo.");
