@@ -1,6 +1,7 @@
 package com.leocaliban.unit_test.servicos;
 
 import static com.leocaliban.unit_test.builders.FilmeBuilder.umFilme;
+import static com.leocaliban.unit_test.builders.LocacaoBuilder.umLocacao;
 import static com.leocaliban.unit_test.builders.UsuarioBuilder.umUsuario;
 import static com.leocaliban.unit_test.matchers.MatchersProprios.caiNumaSegunda;
 import static com.leocaliban.unit_test.matchers.MatchersProprios.isHoje;
@@ -44,6 +45,8 @@ public class LocacaoServiceTeste {
 	private SPCService spc;
 	
 	private LocacaoDAO dao;
+	
+	private EmailService emailService;
 
 	@Rule
 	public ErrorCollector error = new ErrorCollector();
@@ -57,7 +60,10 @@ public class LocacaoServiceTeste {
 		dao = Mockito.mock(LocacaoDAO.class);
 		service.setLocacaoDAO(dao);
 		spc = Mockito.mock(SPCService.class);
-		service.serSPCService(spc);
+		service.setSPCService(spc);
+		emailService = Mockito.mock(EmailService.class);
+		service.setEmailService(emailService);
+		
 		
 	}
 	
@@ -208,18 +214,41 @@ public class LocacaoServiceTeste {
 	}
 	
 	@Test
-	public void naoDeveAlugarFilmeParaUsuarioComSaldoNegativo() throws FilmeSemEstoqueException, LocadoraException {
+	public void naoDeveAlugarFilmeParaUsuarioComSaldoNegativo() throws FilmeSemEstoqueException {
 		//cenario
 		Usuario usuario = umUsuario().agora();
 		List<Filme> filmes = Arrays.asList(umFilme().agora());
 		
 		when(spc.possuiSaldoNegativo(usuario)).thenReturn(true);
+				
+		//acao
+		try {
+			service.alugarFilme(usuario, filmes);
+		//verificacao
+			Assert.fail();
+		}
+		catch (LocadoraException e) {
+			Assert.assertThat(e.getMessage(), is("Usuário está com saldo negativo."));
+		}
 		
-		exceptedException.expect(LocadoraException.class);
-		exceptedException.expectMessage("Usuário está com saldo negativo.");
+		Mockito.verify(spc).possuiSaldoNegativo(usuario);
+	}
+	
+	@Test
+	public void deveEnviarEmailParaLocacoesAtrasadas() {
+		//cenario
+		Usuario usuario = umUsuario().agora();
+		List<Locacao> locacoes = Arrays.asList(umLocacao()
+				.comUsuario(usuario)
+				.comDataRetorno(obterDataComDiferencaDias(-2)).agora());
+		
+		Mockito.when(dao.obterLocacoesPendentes()).thenReturn(locacoes);
 		
 		//acao
-		service.alugarFilme(usuario, filmes);
+		service.notificarAtrasos();
+		
+		//verificacao
+		Mockito.verify(emailService).notificarAtraso(usuario);
 	}
 		
 }
