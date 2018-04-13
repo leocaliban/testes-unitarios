@@ -39,6 +39,10 @@ import com.leocaliban.unit_test.utils.DataUtils;
 public class LocacaoServiceTeste {
 	
 	private LocacaoService service;
+	
+	private SPCService spc;
+	
+	private LocacaoDAO dao;
 
 	@Rule
 	public ErrorCollector error = new ErrorCollector();
@@ -49,8 +53,11 @@ public class LocacaoServiceTeste {
 	@Before
 	public void criarCenario() {
 		service = new LocacaoService();
-		LocacaoDAO dao = Mockito.mock(LocacaoDAO.class);
+		dao = Mockito.mock(LocacaoDAO.class);
 		service.setLocacaoDAO(dao);
+		spc = Mockito.mock(SPCService.class);
+		service.serSPCService(spc);
+		
 	}
 	
 	@Test
@@ -197,6 +204,21 @@ public class LocacaoServiceTeste {
 		//verificacao
 		//assertThat(retorno.getDataRetorno(), caiEm(Calendar.MONDAY)); (OUTRA FORMA)
 		assertThat(retorno.getDataRetorno(), caiNumaSegunda());
+	}
+	
+	@Test
+	public void naoDeveAlugarFilmeParaUsuarioComSaldoNegativo() throws FilmeSemEstoqueException, LocadoraException {
+		//cenario
+		Usuario usuario = umUsuario().agora();
+		List<Filme> filmes = Arrays.asList(umFilme().agora());
+		
+		Mockito.when(spc.possuiSaldoNegativo(usuario)).thenReturn(true);
+		
+		exceptedException.expect(LocadoraException.class);
+		exceptedException.expectMessage("Usuário está com saldo negativo.");
+		
+		//acao
+		service.alugarFilme(usuario, filmes);
 	}
 		
 }
