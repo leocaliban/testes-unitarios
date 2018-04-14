@@ -240,7 +240,7 @@ public class LocacaoServiceTeste {
 		Usuario usuario = umUsuario().agora();
 		List<Locacao> locacoes = Arrays.asList(umLocacao()
 				.comUsuario(usuario)
-				.comDataRetorno(obterDataComDiferencaDias(-2)).agora());
+				.atrasada().agora());
 		
 		Mockito.when(dao.obterLocacoesPendentes()).thenReturn(locacoes);
 		
