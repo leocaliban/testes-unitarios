@@ -97,18 +97,4 @@ public class LocacaoService {
 			}
 		}
 	}
-	
-	
-	//injeção de dependência do DAO
-	public void setLocacaoDAO(LocacaoDAO dao) {
-		this.dao = dao;
-	}
-	
-	public void setSPCService(SPCService spc) {
-		this.consultaSPC = spc;
-	}
-	
-	public void setEmailService(EmailService email) {
-		this.emailService = email;
-	}
 }

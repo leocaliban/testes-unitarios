@@ -27,7 +27,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ErrorCollector;
 import org.junit.rules.ExpectedException;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 
 import com.leocaliban.unit_test.builders.FilmeBuilder;
 import com.leocaliban.unit_test.daos.LocacaoDAO;
@@ -40,12 +43,16 @@ import com.leocaliban.unit_test.utils.DataUtils;
 
 public class LocacaoServiceTeste {
 	
+	@InjectMocks
 	private LocacaoService service;
 	
+	@Mock
 	private SPCService spc;
 	
+	@Mock
 	private LocacaoDAO dao;
 	
+	@Mock
 	private EmailService emailService;
 
 	@Rule
@@ -55,16 +62,8 @@ public class LocacaoServiceTeste {
 	public ExpectedException exceptedException = ExpectedException.none();
 	
 	@Before
-	public void criarCenario() {
-		service = new LocacaoService();
-		dao = Mockito.mock(LocacaoDAO.class);
-		service.setLocacaoDAO(dao);
-		spc = Mockito.mock(SPCService.class);
-		service.setSPCService(spc);
-		emailService = Mockito.mock(EmailService.class);
-		service.setEmailService(emailService);
-		
-		
+	public void setup() {
+		MockitoAnnotations.initMocks(this);	
 	}
 	
 	@Test
