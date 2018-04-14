@@ -4,6 +4,6 @@ import com.leocaliban.unit_test.entidades.Usuario;
 
 public interface SPCService {
 	
-	public boolean possuiSaldoNegativo(Usuario usuario);
+	public boolean possuiSaldoNegativo(Usuario usuario) throws Exception;
 
 }

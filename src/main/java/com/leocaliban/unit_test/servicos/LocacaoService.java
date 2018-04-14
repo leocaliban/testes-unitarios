@@ -38,11 +38,18 @@ public class LocacaoService {
 			}
 		}
 		
-		if(consultaSPC.possuiSaldoNegativo(usuario)) {
+		boolean negativado;
+		try {
+			negativado = consultaSPC.possuiSaldoNegativo(usuario);
+		}
+		catch (Exception e) {
+			throw new LocadoraException("Problema com SPC.");
+		}
+			
+		if(negativado) {	
 			throw new LocadoraException("Usuário está com saldo negativo.");
 		}
-		
-		
+
 		Locacao locacao = new Locacao();
 		locacao.setFilmes(filmes);
 		locacao.setUsuario(usuario);

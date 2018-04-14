@@ -40,6 +40,7 @@ import com.leocaliban.unit_test.entidades.Usuario;
 import com.leocaliban.unit_test.servicos.exceptions.FilmeSemEstoqueException;
 import com.leocaliban.unit_test.servicos.exceptions.LocadoraException;
 import com.leocaliban.unit_test.utils.DataUtils;
+import com.sun.org.apache.xpath.internal.WhitespaceStrippingElementMatcher;
 
 public class LocacaoServiceTeste {
 	
@@ -213,7 +214,7 @@ public class LocacaoServiceTeste {
 	}
 	
 	@Test
-	public void naoDeveAlugarFilmeParaUsuarioComSaldoNegativo() throws FilmeSemEstoqueException {
+	public void naoDeveAlugarFilmeParaUsuarioComSaldoNegativo() throws Exception {
 		//cenario
 		Usuario usuario = umUsuario().agora();
 		List<Filme> filmes = Arrays.asList(umFilme().agora());
@@ -248,6 +249,24 @@ public class LocacaoServiceTeste {
 		
 		//verificacao
 		Mockito.verify(emailService).notificarAtraso(usuario);
+	}
+	
+	
+	@Test
+	public void deveTratarErroNoSPC() throws Exception {
+		//cenario
+		Usuario usuario = umUsuario().agora();
+		List<Filme> filmes = Arrays.asList(umFilme().agora());
+		
+		when(spc.possuiSaldoNegativo(usuario)).thenThrow(new Exception("FALHOU"));
+		
+		exceptedException.expect(LocadoraException.class);
+		exceptedException.expectMessage("Problema com SPC.");
+		
+		//acao
+		service.alugarFilme(usuario, filmes);
+		
+		//verificacao
 	}
 		
 }
