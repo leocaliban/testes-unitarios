@@ -27,6 +27,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ErrorCollector;
 import org.junit.rules.ExpectedException;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -40,7 +41,6 @@ import com.leocaliban.unit_test.entidades.Usuario;
 import com.leocaliban.unit_test.servicos.exceptions.FilmeSemEstoqueException;
 import com.leocaliban.unit_test.servicos.exceptions.LocadoraException;
 import com.leocaliban.unit_test.utils.DataUtils;
-import com.sun.org.apache.xpath.internal.WhitespaceStrippingElementMatcher;
 
 public class LocacaoServiceTeste {
 	
@@ -267,6 +267,25 @@ public class LocacaoServiceTeste {
 		service.alugarFilme(usuario, filmes);
 		
 		//verificacao
+	}
+	
+	
+	@Test
+	public void deveProrrogarUmaLocacao() {
+		// cenario
+		Locacao locacao = umLocacao().agora();
+
+		// acao
+		service.prorrogarLocacao(locacao, 3);
+
+		// verificacao
+		ArgumentCaptor<Locacao> argCapt = ArgumentCaptor.forClass(Locacao.class);
+		Mockito.verify(dao).salvar(argCapt.capture());
+		Locacao locacaoRetornada = argCapt.getValue();
+		
+		error.checkThat(locacaoRetornada.getValor(), is(12.0));
+		error.checkThat(locacaoRetornada.getDataLocacao(), isHoje());
+		error.checkThat(locacaoRetornada.getDataRetorno(), isHojeComDiferencaDias(3));
 	}
 		
 }
