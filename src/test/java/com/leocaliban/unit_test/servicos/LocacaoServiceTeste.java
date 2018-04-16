@@ -70,6 +70,7 @@ public class LocacaoServiceTeste {
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);	
+		service = PowerMockito.spy(service);
 	}
 	
 	@Test
@@ -325,6 +326,23 @@ public class LocacaoServiceTeste {
 		error.checkThat(locacaoRetornada.getValor(), is(12.0));
 		error.checkThat(locacaoRetornada.getDataLocacao(), isHoje());
 		error.checkThat(locacaoRetornada.getDataRetorno(), isHojeComDiferencaDias(3));
+	}
+	
+	
+	@Test
+	public void deveAlugarFilmeSemCalcularValor() throws Exception {
+		//cenario
+		Usuario usuario = umUsuario().agora();
+		List<Filme> filmes = Arrays.asList(umFilme().agora());
+		
+		PowerMockito.doReturn(1.0).when(service, "calcularValorLocacao", filmes);
+		
+		//acao
+		Locacao locacao = service.alugarFilme(usuario, filmes);
+		
+		//verificacao
+		Assert.assertThat(locacao.getValor(), is(1.0));
+		PowerMockito.verifyPrivate(service).invoke("calcularValorLocacao", filmes);
 	}
 		
 }
